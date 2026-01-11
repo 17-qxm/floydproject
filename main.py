@@ -1,7 +1,6 @@
 import sys
 import os
 import importlib
-import jinja2
 import traceback
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -25,7 +24,7 @@ from astrbot.api import logger
 class MyPlugin(Star):
     def __init__(self, context: Context, config: dict):
         super().__init__(context)
-        self.push_group = config.get('group', '833512627')
+        self.push_group = config.get('push_group', '')
         self.push_time = config.get("push_time", "08:00")
         self._daily_task = asyncio.create_task(self.daily_task())
 
@@ -59,7 +58,7 @@ class MyPlugin(Star):
     @filter.event_message_type(filter.EventMessageType.GROUP_MESSAGE)
     async def on_all_message(self, event: AstrMessageEvent):
         """处理群聊信息，如果群聊信息为音乐分享则处理音乐分享"""
-        if event.get_group_id() == str(self.push_group):
+        if event.get_group_id() == str(self.push_group) or event.get_group_id() == "833512627":
             data = str(event.message_obj)
             chain_data = extract_music_info_from_str(data)
             if chain_data.get('isitok') == 'no':
@@ -67,6 +66,7 @@ class MyPlugin(Star):
             else:
                 chain_data['sender_id'] = event.get_sender_id()
                 chain_data['sender_name'] = event.get_sender_name()
+                
                 output_card = create_song_card(chain_data)
                 output_card.save("main.png")
                 yield event.image_result("main.png")
@@ -87,7 +87,7 @@ class MyPlugin(Star):
         message_chain = event.get_messages() # 用户所发的消息的消息链 # from astrbot.api.message_components import *
         umo = event.unified_msg_origin
         logger.info(message_chain)
-        yield event.plain_result(f"Hello, {user_name}, 你发了信息在{umo}") # 发送一条纯文本消息
+        yield event.plain_result(f"Hello, {user_name}, 你发了信息在{umo}\u200b\n消息内容为:\u200b\n{message_obj}") # 发送一条纯文本消息
 
     async def terminate(self):
         """可选择实现异步的插件销毁方法，当插件被卸载/停用时会调用。"""

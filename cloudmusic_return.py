@@ -5,10 +5,8 @@ from io import BytesIO
 from datetime import date, datetime, timedelta
 import linecache
 
-import ast
 import re
 import os
-import sys
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 
@@ -41,13 +39,21 @@ def extract_music_info_from_str(data_str):
         # 匹配作者
         author_match = re.search(r"'desc':\s*'([^']+)'", data_str)
         author = author_match.group(1)
-    
-        return {
-            'isitok': 'yes',
-            'song_name': song_name,
-            'cover_url': cover_url,
-            'author': author
-        }
+
+        if song_name.rstrip() != "哔哩哔哩":
+            return {
+                'isitok': 'yes',
+                'song_name': song_name,
+                'cover_url': cover_url,
+                'author': author
+            }
+        else:
+            return {
+                'isitok': 'yes',
+                'song_name': author,
+                'cover_url': cover_url,
+                'author': song_name
+            }
 
 
 

@@ -3,7 +3,7 @@
         "description": "无定论的群号",
         "type": "string",
         "hint": "833512627 这是测试用的那个群的号",
-        "default": "833512627"
+        "default": "1077390229"
     },
     "push_time": {
         "description": "推送时间(以服务器时区为准)",

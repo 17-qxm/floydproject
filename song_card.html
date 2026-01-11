@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+        @font-face {
+            font-family: 'MyCustomFont';
+            src: url('1.ttf') format('truetype');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            width: 300px;
+            background: white;
+            font-family: 'MyCustomFont', sans-serif;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+        }
+
+        .top-section {
+            display: flex;
+            width: 100%;
+        }
+
+        .song_pic {
+            width: 100px;
+            height: 100px;
+        }
+
+        .song_pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .song_info {
+            width: 200px;
+            height: 100px;
+        }
+
+        .song_name {
+            font-size: 32px;
+            color: black;
+            margin: 0;
+            line-height: 1.2;
+            height: 50px;
+            display: flex;
+            align-items: flex-end;
+            
+        }
+
+        .author {
+            font-size: 24px;
+            color: gray;
+            margin: 10px 0 0 0;
+            line-height: 1.2;
+        }
+
+        .recommender {
+            width: 300px;
+            height: 25px;
+            display: flex;
+            align-items: center;
+            padding: 0 5px;
+            box-sizing: border-box;
+            overflow: hidden;
+            position: relative;
+            color: white;
+            background-image: url("https://q.qlogo.cn/g?b=qq&nk=2643699211&s=640");
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* 模糊层 */
+        .recommender::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.3);
+            /* 半透明黑色遮罩 */
+            backdrop-filter: blur(10px);
+            /* 毛玻璃效果 */
+            z-index: 1;
+        }
+
+        /* 内容层 */
+        .recommender>* {
+            position: relative;
+            z-index: 2;
+        }
+
+        .recommender p {
+            margin: 0;
+            font-size: 12px;
+            white-space: nowrap;
+            font-weight: bold;
+            color: white;
+            text-shadow:
+                -1px -1px 0 #000,
+                1px -1px 0 #000,
+                -1px 1px 0 #000,
+                1px 1px 0 #000;
+        }
+
+        .recommender img {
+            height: 20px;
+            width: 20px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin: 0 5px;
+            border: 2px solid white;
+            box-sizing: border-box;
+            box-shadow: 0 0 0 1px black;
+        }
+    </style>
+</head>
+
+<body>
+    <div>
+        <div class="top-section">
+            <div class="song_pic">
+                <img src="https://p2.music.126.net/xfKVKRRaXoGs3yBB4aqpIw==/109951170544086941.jpg?imageView=1&thumbnail=1260z2612&type=webp&quality=80"
+                    alt="封面">
+            </div>
+            <div class="song_info">
+                <h1 class="song_name">R</h1>
+                <p class="author">Roselia</p>
+            </div>
+        </div>
+    </div>
+    <div class="recommender">
+        <p>推荐人:</p>
+        <img src="https://q.qlogo.cn/g?b=qq&nk=2643699211&s=640" alt="头像">
+        <p>17qxm</p>
+    </div>
+</body>
+
+</html>

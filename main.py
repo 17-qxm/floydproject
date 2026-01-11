@@ -58,7 +58,7 @@ class MyPlugin(Star):
     @filter.event_message_type(filter.EventMessageType.GROUP_MESSAGE)
     async def on_all_message(self, event: AstrMessageEvent):
         """处理群聊信息，如果群聊信息为音乐分享则处理音乐分享"""
-        if event.get_group_id() == str(self.push_group) or event.get_group_id() == "833512627":
+        if event.get_group_id() == str(self.push_group) or event.get_group_id() == "833512627" or event.get_group_id() == "959826262":
             data = str(event.message_obj)
             chain_data = extract_music_info_from_str(data)
             if chain_data.get('isitok') == 'no':

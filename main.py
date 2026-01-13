@@ -10,7 +10,9 @@ if current_dir not in sys.path:
 import cloudmusic_return
 importlib.reload(cloudmusic_return)
 from cloudmusic_return import extract_music_info_from_str, create_song_card, push_song_daily, calculate_sleep_time
-
+import xibao
+importlib.reload(xibao)
+from xibao import generate_image
 
 import asyncio
 from astrbot.api.event import filter, AstrMessageEvent, MessageEventResult
@@ -60,16 +62,28 @@ class MyPlugin(Star):
         """处理群聊信息，如果群聊信息为音乐分享则处理音乐分享"""
         if event.get_group_id() == str(self.push_group) or event.get_group_id() == "833512627" or event.get_group_id() == "959826262":
             data = str(event.message_obj)
-            chain_data = extract_music_info_from_str(data)
-            if chain_data.get('isitok') == 'no':
-                """yield event.plain_result("Is not a music share card")"""
+            if event.get_message_outline() != "[ComponentType.Json]":
+                """TODO"""
+                logger.error("Is not a music share card")
             else:
-                chain_data['sender_id'] = event.get_sender_id()
-                chain_data['sender_name'] = event.get_sender_name()
+                chain_data = extract_music_info_from_str(data)
+                if chain_data.get('isitok') == 'no':
+                    """yield event.plain_result("Is not a music share card")"""
+                else:
+                    chain_data['sender_id'] = event.get_sender_id()
+                    chain_data['sender_name'] = event.get_sender_name()
                 
-                output_card = create_song_card(chain_data)
-                output_card.save("main.png")
-                yield event.image_result("main.png")
+                    output_card = create_song_card(chain_data)
+                    output_card.save("main.png")
+                    yield event.image_result("main.png")
+
+        if event.get_group_id() == "833512627":
+            user_name = event.get_sender_id()
+            message_obj = event.message_obj # 用户发的纯文本消息字符串
+            message_chain = event.get_messages() # 用户所发的消息的消息链 # from astrbot.api.message_components import *
+            umo = event.unified_msg_origin
+            logger.info(message_chain)
+            yield event.plain_result(f"Hello, {user_name}, 你发了信息在{umo}\u200b\n消息类型为{event.get_message_outline()}\u200b\n消息内容为:\u200b\n{message_obj}") # 发送一条纯文本消息
 
 
     @filter.command("forcepush")
@@ -77,6 +91,36 @@ class MyPlugin(Star):
         """强制推歌挑战发送，在bug发生时"""
         
         yield event.plain_result(push_song_daily().rstrip())
+    
+    @filter.command("喜报")
+    async def xibao(self, event: AstrMessageEvent, textinput: str):
+        """发送喜报"""
+        if len(textinput) >= 20:
+            yield event.plain_result("字数太多啦！长度应在 20 个字符以内。")
+        elif len(textinput) < 10:
+            size = 250 - len(textinput) * 8
+        elif 15 < len(textinput) < 20:
+            size = 250 - len(textinput) * 9
+        else:
+            size = 250 - len(textinput) * 10
+        x = generate_image("xibao_bg.png", textinput, size, "red", stroke="yellow")
+        x.save("bao.png")
+        yield event.image_result("bao.png")
+    
+    @filter.command("悲报")
+    async def beibao(self, event: AstrMessageEvent, textinput: str):
+        """发送悲报"""
+        if len(textinput) >= 20:
+            yield event.plain_result("字数太多啦！长度应在 20 个字符以内。")
+        elif len(textinput) < 10:
+            size = 250 - len(textinput) * 8
+        elif 15 < len(textinput) < 20:
+            size = 250 - len(textinput) * 9
+        else:
+            size = 250 - len(textinput) * 10
+        b = generate_image("beibao_bg.png", textinput, size, "black", stroke="white")
+        b.save("bao.png")
+        yield event.image_result("bao.png")
 
     # 注册指令的装饰器。指令名为 helloworld。注册成功后，发送 `/helloworld` 就会触发这个指令，并回复 `你好, {user_name}!`
     @filter.command("helloworld")
@@ -87,7 +131,7 @@ class MyPlugin(Star):
         message_chain = event.get_messages() # 用户所发的消息的消息链 # from astrbot.api.message_components import *
         umo = event.unified_msg_origin
         logger.info(message_chain)
-        yield event.plain_result(f"Hello, {user_name}, 你发了信息在{umo}\u200b\n消息内容为:\u200b\n{message_obj}") # 发送一条纯文本消息
+        yield event.plain_result(f"Hello, {user_name}, 你发了信息在{umo}\u200b\n消息类型为{event.get_message_outline()}\u200b\n消息内容为:\u200b\n{message_obj}") # 发送一条纯文本消息
 
     async def terminate(self):
         """可选择实现异步的插件销毁方法，当插件被卸载/停用时会调用。"""

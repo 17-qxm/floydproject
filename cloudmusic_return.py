@@ -21,6 +21,7 @@ def extract_music_info_from_str(data_str):
     Returns:
         dict: 包含song_name, cover_url, author, music_url的字典，提取失败返回None
     """
+
     # 方案3：终极备用 - 直接匹配关键字段
     # 匹配歌曲名
     song_name_match = re.search(r"'title':\s*'([^']+)'", data_str)

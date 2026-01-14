@@ -62,7 +62,7 @@ class MyPlugin(Star):
         """处理群聊信息，如果群聊信息为音乐分享则处理音乐分享"""
         if event.get_group_id() == str(self.push_group) or event.get_group_id() == "833512627" or event.get_group_id() == "959826262":
             data = str(event.message_obj)
-            if event.get_message_outline() != "[ComponentType.Json]":
+            if event.get_message_outline().rstrip() != "[ComponentType.Json]":
                 """TODO"""
                 logger.error("Is not a music share card")
             else:
@@ -80,9 +80,7 @@ class MyPlugin(Star):
         if event.get_group_id() == "833512627":
             user_name = event.get_sender_id()
             message_obj = event.message_obj # 用户发的纯文本消息字符串
-            message_chain = event.get_messages() # 用户所发的消息的消息链 # from astrbot.api.message_components import *
             umo = event.unified_msg_origin
-            logger.info(message_chain)
             yield event.plain_result(f"Hello, {user_name}, 你发了信息在{umo}\u200b\n消息类型为{event.get_message_outline()}\u200b\n消息内容为:\u200b\n{message_obj}") # 发送一条纯文本消息
 
 

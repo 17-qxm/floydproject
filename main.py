@@ -28,6 +28,7 @@ class MyPlugin(Star):
         super().__init__(context)
         self.push_group = config.get('push_group', '')
         self.push_time = config.get("push_time", "08:00")
+        self.debug_use = config.get("debug_use", True)
         self._daily_task = asyncio.create_task(self.daily_task())
 
     async def initialize(self):
@@ -76,13 +77,13 @@ class MyPlugin(Star):
                     output_card = create_song_card(chain_data)
                     output_card.save("main.png")
                     yield event.image_result("main.png")
-
-        if event.get_group_id() == "833512627":
-            user_name = event.get_sender_id()
-            message_obj = event.message_obj # 用户发的纯文本消息字符串
-            umo = event.unified_msg_origin
-            yield event.plain_result(f"Hello, {user_name}, 你发了信息在{umo}\u200b\n消息类型为{event.get_message_outline()}\u200b\n消息内容为:\u200b\n{message_obj}") # 发送一条纯文本消息
-
+        if self.debug_use == True:
+            if event.get_group_id() == "833512627":
+                user_name = event.get_sender_id()
+                message_obj = event.message_obj # 用户发的纯文本消息字符串
+                umo = event.unified_msg_origin
+                yield event.plain_result(f"Hello, {user_name}, 你发了信息在{umo}\u200b\n消息类型为{event.get_message_outline()}\u200b\n消息内容为:\u200b\n{message_obj}") # 发送一条纯文本消息
+        
 
     @filter.command("forcepush")
     async def forcepush_launcher(self, event: AstrMessageEvent):

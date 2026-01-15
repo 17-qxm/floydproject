@@ -10,5 +10,11 @@
         "type": "string",
         "hint": "填写推送的时间，如: 08:00, 12:30, 18:00",
         "default": "08:00"
+    },
+    "debug_use": {
+        "description": "调试用 833512627",
+        "type": "bool",
+        "hint": "是否调试",
+        "default": true
     }
 }

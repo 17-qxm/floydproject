@@ -21,6 +21,7 @@ from astrbot.api.star import Context, Star, register
 import astrbot.api.message_components as Comp
 from astrbot.api.message_components import Plain, Image
 from astrbot.api import logger
+import random
 
 @register("floyd_project", "17qxm", "一个简单的 Hello World 插件", "0.0.1")
 class MyPlugin(Star):
@@ -120,6 +121,20 @@ class MyPlugin(Star):
         b = generate_image("beibao_bg.png", textinput, size, "black", stroke="white")
         b.save("bao.png")
         yield event.image_result("bao.png")
+
+    @filter.command("吃什么")
+    async def chishenme(self, event: AstrMessageEvent):
+        """吃什么的主要函数"""
+        current_dir = os.path.dirname(os.path.abspath(__file__))
+        random_number = random.randrange(1, 29)
+        image_name = f"{random_number}_s.png"
+        image_path = os.path.join(current_dir, 'cards', image_name)
+        if not os.path.exists(image_path):
+            logger.error(f"没有找到图片: {image_path}")
+        else:
+            yield event.image_result(image_path)
+
+
 
     # 注册指令的装饰器。指令名为 helloworld。注册成功后，发送 `/helloworld` 就会触发这个指令，并回复 `你好, {user_name}!`
     @filter.command("helloworld")

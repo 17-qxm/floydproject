@@ -117,7 +117,7 @@ def create_song_card(chain_data) -> Image.Image:
 
 def push_song_daily():
     nowtime = date.today()
-    day_pass = nowtime - date(2026, 4, 12)
+    day_pass = nowtime - date(2026, 4, 13)
     int_day_pass = day_pass.days
     txt_path = os.path.join(current_dir, "song_push.txt")
     line_content = linecache.getline(txt_path, int_day_pass)

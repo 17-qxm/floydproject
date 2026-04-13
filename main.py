@@ -49,6 +49,7 @@ class MyPlugin(Star):
                 # 推送新闻
                 a = str(self.push_group)
                 message_chain = MessageChain().message(push_song_daily().rstrip())
+                await self.context.send_message(f"Floyd:GroupMessage:{self.push_group}", MessageChain().message("今日推歌挑战！"))
                 await self.context.send_message(f"Floyd:GroupMessage:{self.push_group}", message_chain)
 
                 # 再等待一段时间，避免重复推送
